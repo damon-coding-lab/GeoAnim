@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoAnim - AI 数学动画生成器</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>🧮 GeoAnim</h1>
+            <p class="subtitle">用自然语言描述几何问题，AI 自动生成专业数学动画</p>
+        </header>
+
+        <!-- AI 生成区域 -->
+        <section class="generator-section">
+            <h2>✨ AI 生成</h2>
+            <div class="input-group">
+                <textarea 
+                    id="description" 
+                    placeholder="输入几何描述，例如：正方形ABCD，对角线AC上有一动点P，连接BP使BP⊥AC"
+                    rows="3"
+                ></textarea>
+                <button id="generateBtn" class="btn btn-primary" onclick="generateAnimation()">
+                    生成动画
+                </button>
+            </div>
+            <div id="resultArea" class="result-area"></div>
+        </section>
+
+        <!-- 预置模型展示 -->
+        <section class="models-section">
+            <h2>📚 预置模型库</h2>
+            <p class="section-desc">点击任意模型卡片可直接播放演示视频</p>
+            <div class="models-grid" id="modelsGrid">
+                {% for model_id, model in models.items() %}
+                <div class="model-card" onclick="playVideo('{{ model_id }}')">
+                    <div class="model-icon">
+                        {% if loop.index == 1 %}📐{% elif loop.index == 2 %}🏇{% elif loop.index == 3 %}📐{% elif loop.index == 4 %}⭕{% elif loop.index == 5 %}📏{% elif loop.index == 6 %}✂️{% elif loop.index == 7 %}⭐{% elif loop.index == 8 %}🎯{% elif loop.index == 9 %}🦶{% else %}📍{% endif %}
+                    </div>
+                    <h3>{{ model.name }}</h3>
+                    <span class="chapter-tag">{{ model.chapter }}</span>
+                    <p class="model-desc">{{ model.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- 技术栈 -->
+        <section class="tech-section">
+            <h2>🔧 技术栈</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <span class="tech-name">Manim</span>
+                    <span class="tech-desc">3Blue1Brown 动画引擎</span>
+                </div>
+                <div class="tech-item">
+                    <span class="tech-name">Python</span>
+                    <span class="tech-desc">核心开发语言</span>
+                </div>
+                <div class="tech-item">
+                    <span class="tech-name">Flask</span>
+                    <span class="tech-desc">Web 框架</span>
+                </div>
+                <div class="tech-item">
+                    <span class="tech-name">AI</span>
+                    <span class="tech-desc">自然语言理解</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>Built with ❤️ using Manim + AI</p>
+        </footer>
+    </div>
+
+    <!-- 视频播放器模态框 -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">视频播放</h3>
+            <video id="videoPlayer" controls autoplay>
+                <source id="videoSource" src="" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
+        </div>
+    </div>
+
+    <script>
+        // 播放预置模型视频
+        function playVideo(modelId) {
+            const modal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoSource = document.getElementById('videoSource');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            // 获取模型信息
+            fetch('/api/models')
+                .then(res => res.json())
+                .then(models => {
+                    const model = models[modelId];
+                    modalTitle.textContent = model.name;
+                    videoSource.src = `/api/models/${modelId}/video`;
+                    videoPlayer.load();
+                    modal.style.display = 'block';
+                });
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            modal.style.display = 'none';
+            videoPlayer.pause();
+        }
+
+        // AI 生成动画
+        function generateAnimation() {
+            const description = document.getElementById('description').value.trim();
+            const resultArea = document.getElementById('resultArea');
+            const btn = document.getElementById('generateBtn');
+            
+            if (!description) {
+                resultArea.innerHTML = '<div class="error">请输入几何描述</div>';
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = '分析中...';
+            resultArea.innerHTML = '<div class="loading">🤖 AI 正在分析您的描述...</div>';
+            
+            fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ description })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.matched_model) {
+                    const model = data.matched_model;
+                    let html = `<div class="success">✅ AI 分析完成</div>`;
+                    html += '<div class="suggestions">';
+                    html += `<div class="suggestion-item" onclick="playVideo('${model.model_id}')">
+                        <strong>${model.model_name}</strong>
+                        <span>${model.explanation ? model.explanation.substring(0, 50) + '...' : ''}</span>
+                    </div>`;
+                    html += '</div>';
+                    resultArea.innerHTML = html;
+                } else if (data.success && data.suggestions) {
+                    let html = `<div class="success">✅ ${data.message}</div>`;
+                    html += '<div class="suggestions">';
+                    html += '<h4>为您推荐以下模型：</h4>';
+                    data.suggestions.forEach(s => {
+                        html += `<div class="suggestion-item" onclick="playVideo('${s.model_id || Object.keys(models).find(k => models[k].name === s.name)}')">
+                            <strong>${s.name || s.model.name}</strong>
+                            <span>${s.chapter || s.model.chapter}</span>
+                        </div>`;
+                    });
+                    html += '</div>';
+                    resultArea.innerHTML = html;
+                } else {
+                    resultArea.innerHTML = `<div class="error">❌ ${data.error}</div>`;
+                }
+            })
+            .catch(err => {
+                resultArea.innerHTML = `<div class="error">❌ 请求失败：${err}</div>`;
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = '生成动画';
+            });
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
