@@ -240,18 +240,6 @@ curl http://localhost:5001/api/models/half_angle_square/video \
 
 ---
 
-## 📊 成本分析
-
-| 操作 | DeepSeek 消耗 | 预估成本 |
-|------|---------------|----------|
-| 单次 AI 分析 | ~100 tokens | ¥0.001 |
-| Manim 渲染 | CPU 渲染 | 免费 |
-| 视频存储 | 本地/云存储 | 用户自控 |
-
-**实测**：生成一个几何动画，AI 分析费用约 **¥0.01**
-
----
-
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
