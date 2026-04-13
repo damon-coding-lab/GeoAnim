@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="50%" style="stop-color:#16213e"/>
+      <stop offset="100%" style="stop-color:#0f3460"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff"/>
+      <stop offset="100%" style="stop-color:#7b2cbf"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- 装饰圆形 -->
+  <circle cx="200" cy="200" r="300" fill="#00d4ff" fill-opacity="0.05"/>
+  <circle cx="1100" cy="450" r="250" fill="#7b2cbf" fill-opacity="0.05"/>
+
+  <!-- 标题 -->
+  <text x="640" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="url(#title)">GeoAnim</text>
+
+  <!-- 副标题 -->
+  <text x="640" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" fill="#ffffff">AI 数学动画生成器</text>
+
+  <!-- 描述 -->
+  <text x="640" y="350" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#aaaaaa">用自然语言描述几何问题，AI 自动生成专业数学动画</text>
+
+  <!-- 功能标签 -->
+  <rect x="180" y="420" width="200" height="60" rx="30" fill="#00d4ff" fill-opacity="0.2"/>
+  <text x="280" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#00d4ff">Manim</text>
+
+  <rect x="420" y="420" width="220" height="60" rx="30" fill="#00ff88" fill-opacity="0.2"/>
+  <text x="530" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#00ff88">DeepSeek AI</text>
+
+  <rect x="680" y="420" width="180" height="60" rx="30" fill="#ff6b6b" fill-opacity="0.2"/>
+  <text x="770" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#ff6b6b">Flask</text>
+
+  <rect x="900" y="420" width="200" height="60" rx="30" fill="#7b2cbf" fill-opacity="0.2"/>
+  <text x="1000" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#7b2cbf">Python</text>
+
+  <!-- 底部链接 -->
+  <text x="640" y="580" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#666666">github.com/damon-coding-lab/GeoAnim</text>
+</svg>
