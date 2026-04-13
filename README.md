@@ -178,7 +178,8 @@ MIT License
 
 ## 联系方式
 
-- GitHub Issues: https://github.com/YOUR_USERNAME/geoanim/issues
+- GitHub: https://github.com/damon-coding-lab/GeoAnim
+- Issues: https://github.com/damon-coding-lab/GeoAnim/issues
 
 ---
 
