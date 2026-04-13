@@ -2,7 +2,7 @@
 
 > 用自然语言描述几何问题，AI 自动生成专业数学动画
 
-![GeoAnim Cover](social-preview.svg)
+![GeoAnim Cover](social-preview.png)
 
 [English](README_en.md) | 简体中文
 
